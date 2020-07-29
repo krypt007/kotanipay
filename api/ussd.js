@@ -49,11 +49,9 @@ async function checkIfUserExists(userId){   //Checks if a document with the USER
       admin.auth().getUser(userId)
         .then(function(userRecord) {          
             if (userRecord) {
-                console.log('Successfully fetched user data:', userRecord.uid);
                 exists = true;
                 resolve (exists);
             } else {
-              console.log("Document", userId, "does not exists:\n");
               exists = false;
               resolve (exists);
             }
@@ -63,6 +61,7 @@ async function checkIfUserExists(userId){   //Checks if a document with the USER
 }  
 
 function createNewUser(userId, userMSISDN){             //This was to optimize firebase queries since firestore returns the whole data set when you lookup a documentID
+    
     return new Promise(resolve => {
         admin.auth().createUser({
             uid: userId,
@@ -101,12 +100,11 @@ async function addUserDataToDB(userId, userMSISDN){
       const newAccount = {
           'seedKey' : `${enc_seed}`,
           'publicAddress' : `${publicAddress}`,
-          'userLoginPin' : loginpin
+          'userLoginPin' : `${loginpin}`
       };
   
       let db = firestore.collection('accounts').doc(userId);    //We intend to move this data to IPFS and store it in an encrypted bucket, only accessible by the user
       db.set(newAccount).then(newDoc => {console.log("Document Created:\n", newDoc.id)})
-      // // signupDeposit(publicAddress);
     } catch (err) {
       console.log(err);
     }
