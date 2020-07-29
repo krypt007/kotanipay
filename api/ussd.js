@@ -4,7 +4,8 @@ function ussdPostRequest(){ //Secured API Call from the Telco
     var data = text.split('*');
 
     //  TRANSFER && PHONENUMBER && AMOUNT
-    senderMSISDN = phoneNumber.substring(1);    //Receives the phoneNumber as a 
+    senderMSISDN = phoneNumber.substring(1);    //Retrieves the sender phoneNumber
+    
     try {   //This validates that the recipients phoneNumber is in the correct format
         const recnumber = phoneUtil.parseAndKeepRawInput(`${data[1]}`, 'KE');   //Numbers in National Format are converted to Kenyan Numbers in E164 format
         receiverMSISDN = phoneUtil.format(recnumber, PNF.E164);
@@ -12,7 +13,7 @@ function ussdPostRequest(){ //Secured API Call from the Telco
 
     receiverMSISDN = receiverMSISDN.substring(1);       
     amount = data[2];
-    senderId = await getUserId(senderMSISDN);   //Returns a SHA1 hash of the user's PhoneNumber (USERID) 
+    senderId = await getUserId(senderMSISDN);  // The key point of Integration
     recipientId = await getUserId(receiverMSISDN);  
 
     // Check if users exists in API Database:
